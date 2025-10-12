@@ -67,6 +67,8 @@ namespace Mapadeclases
             exalumno.MostrarInformacion();
             exalumno.RecordarExperiencia();
 
+            Console.WriteLine("\n✅ Pruebas completadas correctamente.");
+
         }
     }
 }

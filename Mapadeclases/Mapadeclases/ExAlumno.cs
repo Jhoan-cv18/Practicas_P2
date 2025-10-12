@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Mapadeclases
 {
-    internal class ExAlumno
+    public class ExAlumno : MiembroDeLaComunidad
     {
+        public int AnioGraduacion { get; set; }
+
+        public void RecordarExperiencia()
+        {
+            Console.WriteLine($"{Nombre} se graduó en el año {AnioGraduacion}.");
+        }
     }
 }

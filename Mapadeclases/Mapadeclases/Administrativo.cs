@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mapadeclases
 {
-    internal class Administrativo
+    public class Administrativo : Empleado
     {
+        public void ProcesarDocumentos()
+        {
+            Console.WriteLine($"{Nombre} está procesando documentos administrativos.");
+        }
     }
 }

@@ -45,6 +45,28 @@ namespace Mapadeclases
 
             Console.WriteLine("------------------------");
 
+            // Prueba con Estudiante
+            Estudiante estudiante = new Estudiante
+            {
+                Nombre = "Jhoan Castillo",
+                Edad = 19,
+                Carrera = "Arquitectura"
+            };
+            estudiante.MostrarInformacion();
+            estudiante.Estudiar();
+
+            Console.WriteLine("------------------------");
+
+            // Prueba con ExAlumno
+            ExAlumno exalumno = new ExAlumno
+            {
+                Nombre = "María López",
+                Edad = 25,
+                AnioGraduacion = 2022
+            };
+            exalumno.MostrarInformacion();
+            exalumno.RecordarExperiencia();
+
         }
     }
 }

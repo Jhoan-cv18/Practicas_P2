@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProductosApi.Data;
-using ProductosApi.Models;
+using Productos.Domain.Entities;
+using Productos.Infrastructure.Repositories;
+using Productos.Infrastructure.UnitOfWork;
 
 namespace ProductosApi.Controllers
 {
@@ -9,25 +9,26 @@ namespace ProductosApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(UnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _unitOfWork.Products.GetAllAsync();
+            return Ok(products);
         }
 
         // GET: api/products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _unitOfWork.Products.GetByIdAsync(id);
 
             if (product == null)
                 return NotFound();
@@ -39,11 +40,12 @@ namespace ProductosApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Products.AddAsync(product);
+            await _unitOfWork.SaveAsync();
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
+
 
         // PUT: api/products/5
         [HttpPut("{id}")]
@@ -52,8 +54,8 @@ namespace ProductosApi.Controllers
             if (id != product.Id)
                 return BadRequest();
 
-            _context.Entry(product).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _unitOfWork.Products.Update(product);
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -62,12 +64,13 @@ namespace ProductosApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _unitOfWork.Products.GetByIdAsync(id);
+
             if (product == null)
                 return NotFound();
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Products.Delete(product);
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }

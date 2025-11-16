@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using ProductosApi.Data;
+using Productos.Infrastructure.Context;
+using Productos.Infrastructure.Repositories;
+using Productos.Infrastructure.UnitOfWork;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<UnitOfWork>();
 
 // Add services to the container.
 

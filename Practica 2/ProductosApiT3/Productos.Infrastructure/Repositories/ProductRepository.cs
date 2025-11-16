@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Productos.Domain.Entities;
 using Productos.Infrastructure.Context;
 
@@ -15,7 +13,7 @@ namespace Productos.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products.ToListAsync();
         }
@@ -35,14 +33,9 @@ namespace Productos.Infrastructure.Repositories
             _context.Products.Update(product);
         }
 
-        public void Remove(Product product)
+        public void Delete(Product product)
         {
             _context.Products.Remove(product);
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
         }
     }
 }

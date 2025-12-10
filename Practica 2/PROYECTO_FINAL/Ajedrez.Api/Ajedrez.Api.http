@@ -1,0 +1,6 @@
+@Ajedrez.Api_HostAddress = http://localhost:5025
+
+GET {{Ajedrez.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

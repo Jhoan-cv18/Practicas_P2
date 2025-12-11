@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ajedrez.Domain.Base;
 
 namespace Ajedrez.Domain.Entities
 {
-    internal class Jugador
+    public class Jugador : BaseEntity
     {
+        public string Nombre { get; set; } = string.Empty;
+
+       
+        public int ELO { get; set; } = 1000;
+
+        public Jugador() { }
     }
 }

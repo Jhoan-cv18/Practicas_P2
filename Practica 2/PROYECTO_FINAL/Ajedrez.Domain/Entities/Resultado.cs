@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ajedrez.Domain.Entities
+﻿namespace Ajedrez.Domain.Entities
 {
-    internal class Resultado
+    public enum Resultado
     {
+        BlancasGanan = 1,
+        NegrasGanan = 2,
+        Tablas = 3
     }
 }

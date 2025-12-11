@@ -1,20 +1,39 @@
+using Ajedrez.Infrastructure.Context;
+using Ajedrez.Infrastructure.Repositories;
+using Ajedrez.Infrastructure.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Agregar el DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Registrar repositorios
+builder.Services.AddScoped<IJugadorRepository, JugadorRepository>();
+builder.Services.AddScoped<IPartidaRepository, PartidaRepository>();
+builder.Services.AddScoped<ITorneoRepository, TorneoRepository>();
+
+// Registrar UnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Añadir controladores
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

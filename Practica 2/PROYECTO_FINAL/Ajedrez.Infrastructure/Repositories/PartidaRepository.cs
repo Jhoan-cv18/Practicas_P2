@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ajedrez.Domain.Entities;
+using Ajedrez.Infrastructure.Context;
+using Ajedrez.Infrastructure.Repositories.Interfaces;
 
 namespace Ajedrez.Infrastructure.Repositories
 {
-    internal class PartidaRepository
+    public class PartidaRepository : Repository<Partida>, IPartidaRepository
     {
+        public PartidaRepository(AppDbContext context) : base(context)
+        {
+        }
     }
 }

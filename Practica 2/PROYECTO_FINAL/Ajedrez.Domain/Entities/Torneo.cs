@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Ajedrez.Domain.Base;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ajedrez.Domain.Entities
 {
-    internal class Torneo
+    public class Torneo : BaseEntity
     {
+        public string Nombre { get; set; } = string.Empty;
+        public DateTime Fecha { get; set; }
+        public List<Partida> Partidas { get; set; } = new List<Partida>();
+
     }
 }

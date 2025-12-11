@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ajedrez.Infrastructure.Repositories.Interfaces;
 
 namespace Ajedrez.Infrastructure.Repositories.Interfaces
 {
-    internal class IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
+        IJugadorRepository Jugadores { get; }
+        IPartidaRepository Partidas { get; }
+        ITorneoRepository Torneos { get; }
+
+        Task<int> SaveAsync();
     }
 }

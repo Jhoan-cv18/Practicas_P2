@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ajedrez.Domain.Entities;
 
 namespace Ajedrez.Infrastructure.Repositories.Interfaces
 {
-    internal class IPartidaRepository
+    public interface IPartidaRepository : IGenericRepository<Partida>
     {
     }
 }

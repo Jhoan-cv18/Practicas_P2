@@ -1,0 +1,20 @@
+﻿@model Ajedrez.Web.Models.JugadorVM
+
+<h2>Nuevo Jugador</h2>
+
+<form asp-action="Crear" method="post">
+    <div class="form-group mb-3">
+        <label>Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>ELO</label>
+        <input asp-for="Elo" class="form-control" />
+        <span asp-validation-for="Elo" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>

@@ -1,0 +1,52 @@
+﻿@model Ajedrez.Web.Models.PartidaVM
+
+@{
+    ViewData["Title"] = "Nueva Partida";
+}
+
+<h2>Nueva Partida</h2>
+
+<form asp-action="Crear" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="JugadorBlancasId" class="form-label"></label>
+        <input asp-for="JugadorBlancasId" class="form-control" />
+        <span asp-validation-for="JugadorBlancasId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="JugadorNegrasId" class="form-label"></label>
+        <input asp-for="JugadorNegrasId" class="form-control" />
+        <span asp-validation-for="JugadorNegrasId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="TorneoId" class="form-label"></label>
+        <input asp-for="TorneoId" class="form-control" />
+        <span asp-validation-for="TorneoId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Resultado" class="form-label"></label>
+        <select asp-for="Resultado" class="form-select">
+            <option value="1">Ganan Blancas</option>
+            <option value="2">Ganan Negras</option>
+            <option value="0">Tablas</option>
+        </select>
+        <span asp-validation-for="Resultado" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Fecha" class="form-label"></label>
+        <input asp-for="Fecha" type="date" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

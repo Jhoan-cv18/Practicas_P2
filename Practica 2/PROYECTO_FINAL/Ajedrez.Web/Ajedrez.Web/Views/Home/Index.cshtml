@@ -1,8 +1,31 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Ajedrez Club</h1>
+    <p>Sistema de gestión de jugadores, torneos y partidas</p>
+    <a asp-controller="Jugador" asp-action="Index">...</a>
+    <a asp-controller="Torneo" asp-action="Index">...</a>
+    <a asp-controller="Partida" asp-action="Index">...</a> 
+
+    <div class="mt-4">
+        <a asp-controller="Jugador"
+           asp-action="Index"
+           class="btn btn-primary btn-lg mx-2">
+            Jugadores
+        </a>
+
+        <a class="btn btn-success btn-lg"
+           asp-controller="Torneo"
+           asp-action="Index">
+            Torneos
+        </a>
+
+        <a class="btn btn-warning btn-lg"
+           asp-controller="Partida"
+           asp-action="Index">
+            Partidas &amp; Ranking
+        </a>
+    </div>
 </div>

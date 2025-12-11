@@ -1,0 +1,67 @@
+﻿@model List<Ajedrez.Web.Models.PartidaVM>
+
+@{
+    ViewData["Title"] = "Lista de Partidas";
+}
+
+<h2>Lista de Partidas</h2>
+
+<a class="btn btn-primary mb-3" asp-action="Crear">+ Nueva Partida</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Jugador Blancas</th>
+            <th>Jugador Negras</th>
+            <th>Torneo</th>
+            <th>Resultado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var p in Model)
+            {
+                string resultadoTexto = p.Resultado switch
+                {
+                    1 => "Ganan Blancas",
+                    2 => "Ganan Negras",
+                    0 => "Tablas",
+                    _ => "Desconocido"
+                };
+
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.JugadorBlancasId</td>
+                    <td>@p.JugadorNegrasId</td>
+                    <td>@p.TorneoId</td>
+                    <td>@resultadoTexto</td>
+                    <td>@p.Fecha.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           asp-action="Editar"
+                           asp-route-id="@p.Id">
+                            Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm"
+                           asp-action="Eliminar"
+                           asp-route-id="@p.Id">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">
+                    No hay partidas registradas.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

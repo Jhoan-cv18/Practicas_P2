@@ -1,0 +1,53 @@
+﻿@model List<Ajedrez.Web.Models.TorneoVM>
+
+@{
+    ViewData["Title"] = "Lista de Torneos";
+}
+
+<h2>Lista de Torneos</h2>
+
+<a class="btn btn-primary mb-3" asp-action="Crear">+ Nuevo Torneo</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.Nombre</td>
+                    <td>@t.Fecha.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           asp-action="Editar"
+                           asp-route-id="@t.Id">
+                            Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm"
+                           asp-action="Eliminar"
+                           asp-route-id="@t.Id">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    No hay torneos registrados.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,53 @@
+﻿@model List<Ajedrez.Web.Models.JugadorVM>
+
+@{
+    ViewData["Title"] = "Lista de Jugadores";
+}
+
+<h2>Lista de Jugadores</h2>
+
+<a class="btn btn-primary mb-3" asp-action="Crear">+ Nuevo Jugador</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>ELO</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var j in Model)
+            {
+                <tr>
+                    <td>@j.Id</td>
+                    <td>@j.Nombre</td>
+                    <td>@j.Elo</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           asp-action="Editar"
+                           asp-route-id="@j.Id">
+                            Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm"
+                           asp-action="Eliminar"
+                           asp-route-id="@j.Id">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    No hay jugadores registrados.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

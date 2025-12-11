@@ -1,103 +1,98 @@
-﻿using Ajedrez.Domain.Entities;
-using Ajedrez.Infrastructure.Repositories.Interfaces;
+﻿using Ajedrez.Domain.Entities; // ajusta el namespace si tu entidad está en otro
+using Ajedrez.Infrastructure.Context; // ajusta el namespace de tu DbContext
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ajedrez.Api.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class PartidaController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly AppDbContext _context;
 
-        public PartidaController(IUnitOfWork uow)
+        public PartidaController(AppDbContext context)
         {
-            _uow = uow;
+            _context = context;
         }
 
-        // GET: api/partida
+        // GET: api/Partida
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<Partida>>> GetPartidas()
         {
-            var partidas = await _uow.Partidas.GetAllAsync();
-            return Ok(partidas);
+            return await _context.Partidas.ToListAsync();
         }
 
-        // GET: api/partida/5
+        // GET: api/Partida/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<Partida>> GetPartida(int id)
         {
-            var partida = await _uow.Partidas.GetByIdAsync(id);
+            var partida = await _context.Partidas.FindAsync(id);
+
             if (partida == null)
                 return NotFound();
 
-            return Ok(partida);
+            return partida;
         }
 
-        // POST: api/partida
+        // POST: api/Partida
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Partida partida)
+        public async Task<ActionResult<Partida>> PostPartida(Partida partida)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Validar jugadores
-            var jugadorBlancas = await _uow.Jugadores.GetByIdAsync(partida.JugadorBlancasId);
-            var jugadorNegras = await _uow.Jugadores.GetByIdAsync(partida.JugadorNegrasId);
+            // Si tu entidad tiene CreatedAt/UpdatedAt como string:
+            partida.CreatedAt = DateTime.UtcNow;
 
-            if (jugadorBlancas == null || jugadorNegras == null)
-                return BadRequest("Uno o ambos jugadores no existen.");
+            _context.Partidas.Add(partida);
+            await _context.SaveChangesAsync();
 
-            // Registrar partida
-            await _uow.Partidas.AddAsync(partida);
-
-            // Actualizar ELO según resultado
-            ActualizarELO(jugadorBlancas, jugadorNegras, partida.Resultado);
-
-            _uow.Jugadores.Update(jugadorBlancas);
-            _uow.Jugadores.Update(jugadorNegras);
-
-            await _uow.SaveAsync();
-
-            return CreatedAtAction(nameof(GetById), new { id = partida.Id }, partida);
+            return CreatedAtAction(nameof(GetPartida), new { id = partida.Id }, partida);
         }
 
-        private void ActualizarELO(Jugador blancas, Jugador negras, Resultado resultado)
+        // PUT: api/Partida/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPartida(int id, Partida partida)
         {
-            int K = 30;
+            if (id != partida.Id)
+                return BadRequest();
 
-            double expectedBlancas =
-                1.0 / (1.0 + Math.Pow(10, (negras.ELO - blancas.ELO) / 400.0));
+            _context.Entry(partida).State = EntityState.Modified;
 
-            double expectedNegras =
-                1.0 / (1.0 + Math.Pow(10, (blancas.ELO - negras.ELO) / 400.0));
-
-            double scoreBlancas = resultado switch
+            try
             {
-                Resultado.BlancasGanan => 1,
-                Resultado.NegrasGanan => 0,
-                Resultado.Tablas => 0.5,
-                _ => 0.5
-            };
+                partida.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PartidaExists(id))
+                    return NotFound();
+                else
+                    throw;
+            }
 
-            double scoreNegras = 1 - scoreBlancas;
-
-            blancas.ELO += (int)(K * (scoreBlancas - expectedBlancas));
-            negras.ELO += (int)(K * (scoreNegras - expectedNegras));
+            return NoContent();
         }
 
-        // DELETE: api/partida/5
+        // DELETE: api/Partida/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeletePartida(int id)
         {
-            var partida = await _uow.Partidas.GetByIdAsync(id);
+            var partida = await _context.Partidas.FindAsync(id);
             if (partida == null)
                 return NotFound();
 
-            _uow.Partidas.Delete(partida);
-            await _uow.SaveAsync();
+            _context.Partidas.Remove(partida);
+            await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private bool PartidaExists(int id)
+        {
+            return _context.Partidas.Any(e => e.Id == id);
         }
     }
 }
